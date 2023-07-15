@@ -10,4 +10,7 @@ func TestCampaign(t *testing.T){
 
 	if campaign.Id != "1"
 	t.Errorf("expected 1", campaign.Id)
+	else {
+		t.Errorf("successful")
+	}
 }
