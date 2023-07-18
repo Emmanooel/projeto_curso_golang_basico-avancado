@@ -1,14 +1,80 @@
 package campaign
 
-import "testing"
+import (
+	"testing"
+	"time"
 
-func TestCampaign(t *testing.T) {
-	name := "xbolinha"
-	content := "Body"
-	contacts := []string{"email1@gmail.com", "email2@gmail.com", "email3@gmail.com"}
-	campaign := NewCampaign(name, content, contacts)
+	"github.com/stretchr/testify/assert"
+)
 
-	if campaign.Id != "1" {
-		t.Errorf("expected 1 %s", campaign.Id)
+var (
+	name     = "xbolinha"
+	content  = "Body"
+	contacts = []string{"email1@gmail.com", "email2@gmail.com", "email3@gmail.com"}
+)
+
+func TestCampaign_createCampaign(t *testing.T) {
+	assert := assert.New(t)
+	campaign, _ := NewCampaign(name, content, contacts)
+
+	assert.Equal(campaign.Id, "1")
+	assert.Equal(campaign.Name, name)
+	assert.Equal(campaign.Content, content)
+	assert.Equal(len(campaign.Contacts), len(contacts))
+}
+
+func TestNewCampaignIdNotNull(t *testing.T) {
+	assert := assert.New(t)
+	campaign, e := NewCampaign(name, content, contacts)
+
+	if e == "" {
+		print(e)
 	}
+	assert.NotNil(campaign.Id)
+}
+
+func TestNewCampaign_CreateOnMustBeNow(t *testing.T) {
+	assert := assert.New(t)
+	now := time.Now().Add(-time.Minute)
+	campaign, e := NewCampaign(name, content, contacts)
+	if e != "" {
+		print(e)
+	}
+
+	assert.Greater(campaign.CreateOn, now)
+}
+
+func TestNewCampaign_MustValidadeName(t *testing.T) {
+	assert := assert.New(t)
+
+	e, err := NewCampaign("", content, contacts)
+
+	if e != nil {
+		print(e)
+	}
+
+	assert.Equal("variable is null", err)
+}
+
+func TestNewCampaign_MustValidadeContent(t *testing.T) {
+	assert := assert.New(t)
+
+	e, err := NewCampaign(name, "", contacts)
+
+	if e != nil {
+		print(e)
+	}
+
+	assert.Equal("variable is null", err)
+}
+
+func TestNewCampaign_MustValidateContacts(t *testing.T) {
+	assert := assert.New(t)
+
+	e, err := NewCampaign(name, content, []string{})
+
+	if e != nil {
+		print(e)
+	}
+	assert.Equal("variable is null", err)
 }
