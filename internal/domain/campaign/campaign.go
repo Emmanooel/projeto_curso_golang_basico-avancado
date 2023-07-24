@@ -1,6 +1,7 @@
 package campaign
 
 import (
+	"errors"
 	"time"
 )
 
@@ -16,10 +17,18 @@ type Campaign struct {
 	Contacts []Contact
 }
 
-func NewCampaign(name string, content string, emails []string) (*Campaign, string) {
+func NewCampaign(name string, content string, emails []string) (*Campaign, error) {
 
-	if name == "" || content == "" || len(emails) == 0 {
-		return nil, "variable is null"
+	if name == "" {
+		return nil, errors.New("name is required")
+	}
+
+	if content == "" {
+		return nil, errors.New("content is required")
+	}
+
+	if len(emails) == 0 {
+		return nil, errors.New("contacts is required")
 	}
 
 	contacts := make([]Contact, len(emails))
@@ -33,5 +42,5 @@ func NewCampaign(name string, content string, emails []string) (*Campaign, strin
 		Content:  content,
 		CreateOn: time.Now(),
 		Contacts: contacts,
-	}, ""
+	}, nil
 }

@@ -27,7 +27,7 @@ func TestNewCampaignIdNotNull(t *testing.T) {
 	assert := assert.New(t)
 	campaign, e := NewCampaign(name, content, contacts)
 
-	if e == "" {
+	if e != nil {
 		print(e)
 	}
 	assert.NotNil(campaign.Id)
@@ -37,7 +37,7 @@ func TestNewCampaign_CreateOnMustBeNow(t *testing.T) {
 	assert := assert.New(t)
 	now := time.Now().Add(-time.Minute)
 	campaign, e := NewCampaign(name, content, contacts)
-	if e != "" {
+	if e != nil {
 		print(e)
 	}
 
